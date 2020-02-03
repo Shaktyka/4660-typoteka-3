@@ -59,15 +59,15 @@ const CATEGORIES = [
 let articles = [];
 
 // Генерирует даты в пределах трёх месяцев, включая текущий. Дата не может быть из будущего
-const createRandomDate = () => {
+const generateRandomDate = () => {
   return date = `2019-12-01 14:45:00`;
 };
 
 // Генерирует объект данных для 1 публикации
-const renderArticle = () => {
+const generateArticle = () => {
   return {
     title: TITLES[getRandomNumber(0, TITLES.length - 1)],
-    createdDate: createRandomDate(),
+    createdDate: generateRandomDate(),
     announce: shuffleArray(SENTENCES).slice(0, getRandomNumber(1, 4)).join(' '),
     fullText: shuffleArray(SENTENCES).slice(0, getRandomNumber(1, SENTENCES.length - 1)).join(' '),
     сategory: [shuffleArray(CATEGORIES).slice(0, getRandomNumber(1, SENTENCES.length - 1))]
@@ -75,9 +75,9 @@ const renderArticle = () => {
 };
 
 // Генерирует массив публикаций по переданному числу
-const renderArticles = (amount) => {
+const generateArticles = (amount) => {
   for(let i = 0; i < amount; i++) {
-    articles.push(renderArticle());
+    articles.push(generateArticle());
   }
   return articles;
 };
@@ -86,5 +86,16 @@ module.exports = {
   name: `--generate`,
   run(args) {
     const fs = require(fs);
+
+    const [articlesAmount] = args;
+    const amountArticles = Number.parseInt(articlesAmount, 10) || DEFAULT_AMOUNT;
+    const articlesInJson = JSON.stringify(generateArticles(amountArticles));
+
+    fs.writeFile(FILE_NAME, articlesInJson, (err) => {
+      if (err) {
+        return console.error(`Can't write data to file...`);
+      }
+      return console.info(`Operation success. File created.`);
+    });
   }
 };
