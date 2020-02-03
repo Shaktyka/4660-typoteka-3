@@ -93,18 +93,18 @@ const generateArticles = (amount) => {
 
 module.exports = {
   name: `--generate`,
-  run(args) {
-    const fs = require(`fs`);
+  async run(args) {
+    const fs = require(`fs`).promises;
 
     const [articlesAmount] = args;
     const amountArticles = Number.parseInt(articlesAmount, 10) || DEFAULT_AMOUNT;
     const articlesInJson = JSON.stringify(generateArticles(amountArticles));
 
-    fs.writeFile(FILE_NAME, articlesInJson, (err) => {
-      if (err) {
-        return console.error(chalk.red(ResultWriteMessage.ERROR));
-      }
-      return console.info(chalk.green(ResultWriteMessage.SUCCESS));
-    });
+    try {
+      await fs.writeFile(FILE_NAME, articlesInJson);
+      console.info(chalk.green(ResultWriteMessage.SUCCESS));
+    } catch (err) {
+      console.error(chalk.red(ResultWriteMessage.ERROR));
+    }
   }
 };
