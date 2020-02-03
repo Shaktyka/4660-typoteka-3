@@ -61,15 +61,14 @@ let articles = [];
 
 // Генерирует даты в пределах трёх месяцев, включая текущий
 const generateRandomDate = () => {
-  // Формат: `2019-12-01 14:45:00`
   const getDate = () => {
     return {
-      NOW: moment().valueOf(),
-      THREE_MONTHS_AGO: moment().subtract(3, 'months').valueOf()
+      now: moment().valueOf(),
+      three_month_ago: moment().subtract(3, 'months').valueOf()
     }
   };
   const dateRestrict = getDate();
-  return moment(getRandomNumber(dateRestrict.THREE_MONTHS_AGO, dateRestrict.NOW)).format(`YYYY:MM:DD HH:mm:ss`);
+  return moment(getRandomNumber(dateRestrict.three_month_ago, dateRestrict.now)).format(`YYYY:MM:DD HH:mm:ss`);
 };
 
 // Генерирует объект данных для 1 публикации
