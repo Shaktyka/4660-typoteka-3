@@ -12,7 +12,7 @@ const {
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
 const userCommand = userArguments.slice(USER_ARGV_INDEX);
-const offersAmount = userCommand.slice(1);
+const offersAmount = userCommand.slice(USER_ARGV_INDEX);
 
 if (userArguments.length === 0 || !Cli[userCommand[0]]) {
   Cli[DEFAULT_COMMAND].run();
