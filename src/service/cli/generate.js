@@ -1,5 +1,6 @@
 'use strict';
 
+const moment = require(`moment`);
 const {getRandomNumber, shuffleArray} = require(`../../utils`);
 
 const DEFAULT_AMOUNT = 1;
@@ -58,9 +59,17 @@ const CATEGORIES = [
 // Массив данных публикаций
 let articles = [];
 
-// Генерирует даты в пределах трёх месяцев, включая текущий. Дата не может быть из будущего
+// Генерирует даты в пределах трёх месяцев, включая текущий
 const generateRandomDate = () => {
-  return `2019-12-01 14:45:00`;
+  // Формат: `2019-12-01 14:45:00`
+  const getDate = () => {
+    return {
+      NOW: moment().valueOf(),
+      THREE_MONTHS_AGO: moment().subtract(3, 'months').valueOf()
+    }
+  };
+  const dateRestrict = getDate();
+  return moment(getRandomNumber(dateRestrict.THREE_MONTHS_AGO, dateRestrict.NOW)).format(`YYYY:MM:DD HH:mm:ss`);
 };
 
 // Генерирует объект данных для 1 публикации
