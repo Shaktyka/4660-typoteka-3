@@ -4,11 +4,11 @@ const helpDescription = `
   Программа запускает http-сервер и формирует файл с данными для API.
 
     Гайд:
-    server &lt;command&gt;
+    server <command>
     Команды:
     --version:            выводит номер версии
     --help:               печатает этот текст
-    --generate &lt;count&gt;    формирует файл mocks.json
+    --generate <count>    формирует файл mocks.json
 `;
 
 module.exports = {
