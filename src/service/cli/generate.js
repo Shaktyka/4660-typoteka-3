@@ -42,7 +42,7 @@ const SENTENCES = [
   `Как начать действовать? Для начала просто соберитесь.`,
   `Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравится только игры.`,
   `Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло-партии не дадут заскучать.`
-]; 
+];
 
 const CATEGORIES = [
   `Деревья`,
@@ -61,14 +61,9 @@ let articles = [];
 
 // Генерирует даты в пределах трёх месяцев, включая текущий
 const generateRandomDate = () => {
-  const getDate = () => {
-    return {
-      now: moment().valueOf(),
-      three_month_ago: moment().subtract(3, 'months').valueOf()
-    }
-  };
-  const dateRestrict = getDate();
-  return moment(getRandomNumber(dateRestrict.three_month_ago, dateRestrict.now)).format(`YYYY:MM:DD HH:mm:ss`);
+  const dateNow = moment().valueOf();
+  const threeMonthAgo = moment().subtract(3, `months`).valueOf();
+  return moment(getRandomNumber(threeMonthAgo, dateNow)).format(`YYYY:MM:DD HH:mm:ss`);
 };
 
 // Генерирует объект данных для 1 публикации
@@ -76,15 +71,15 @@ const generateArticle = () => {
   return {
     title: TITLES[getRandomNumber(0, TITLES.length - 1)],
     createdDate: generateRandomDate(),
-    announce: shuffleArray(SENTENCES).slice(0, getRandomNumber(1, 4)).join(' '),
-    fullText: shuffleArray(SENTENCES).slice(0, getRandomNumber(1, SENTENCES.length - 1)).join(' '),
+    announce: shuffleArray(SENTENCES).slice(0, getRandomNumber(1, 4)).join(` `),
+    fullText: shuffleArray(SENTENCES).slice(0, getRandomNumber(1, SENTENCES.length - 1)).join(` `),
     сategory: [shuffleArray(CATEGORIES).slice(0, getRandomNumber(1, SENTENCES.length - 1))]
-  }
+  };
 };
 
 // Генерирует массив публикаций по переданному числу
 const generateArticles = (amount) => {
-  for(let i = 0; i < amount; i++) {
+  for (let i = 0; i < amount; i++) {
     articles.push(generateArticle());
   }
   return articles;
