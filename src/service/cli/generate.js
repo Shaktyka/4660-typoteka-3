@@ -60,7 +60,7 @@ let articles = [];
 
 // Генерирует даты в пределах трёх месяцев, включая текущий. Дата не может быть из будущего
 const generateRandomDate = () => {
-  return date = `2019-12-01 14:45:00`;
+  return `2019-12-01 14:45:00`;
 };
 
 // Генерирует объект данных для 1 публикации
@@ -85,7 +85,7 @@ const generateArticles = (amount) => {
 module.exports = {
   name: `--generate`,
   run(args) {
-    const fs = require(fs);
+    const fs = require(`fs`);
 
     const [articlesAmount] = args;
     const amountArticles = Number.parseInt(articlesAmount, 10) || DEFAULT_AMOUNT;
