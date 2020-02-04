@@ -1,6 +1,7 @@
 'use strict';
 
 const moment = require(`moment`);
+const chalk = require(`chalk`);
 const {getRandomNumber, shuffleArray} = require(`../../utils`);
 
 const DEFAULT_AMOUNT = 1;
@@ -56,6 +57,11 @@ const CATEGORIES = [
   `Железо`
 ];
 
+const ResultWriteMessage = {
+  SUCCESS: `Operation success. File created.`,
+  ERROR: `Can't write data to file...`
+};
+
 // Массив данных публикаций
 let articles = [];
 
@@ -87,18 +93,18 @@ const generateArticles = (amount) => {
 
 module.exports = {
   name: `--generate`,
-  run(args) {
-    const fs = require(`fs`);
+  async run(args) {
+    const fs = require(`fs`).promises;
 
     const [articlesAmount] = args;
     const amountArticles = Number.parseInt(articlesAmount, 10) || DEFAULT_AMOUNT;
     const articlesInJson = JSON.stringify(generateArticles(amountArticles));
 
-    fs.writeFile(FILE_NAME, articlesInJson, (err) => {
-      if (err) {
-        return console.error(`Can't write data to file...`);
-      }
-      return console.info(`Operation success. File created.`);
-    });
+    try {
+      await fs.writeFile(FILE_NAME, articlesInJson);
+      console.info(chalk.green(ResultWriteMessage.SUCCESS));
+    } catch (err) {
+      console.error(chalk.red(ResultWriteMessage.ERROR));
+    }
   }
 };
