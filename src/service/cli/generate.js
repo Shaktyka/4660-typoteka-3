@@ -2,6 +2,7 @@
 
 const moment = require(`moment`);
 const chalk = require(`chalk`);
+const fs = require(`fs`).promises;
 const {getRandomNumber, shuffleArray} = require(`../../utils`);
 
 const DEFAULT_AMOUNT = 1;
@@ -94,7 +95,6 @@ const generateArticles = (amount) => {
 module.exports = {
   name: `--generate`,
   async run(args) {
-    const fs = require(`fs`).promises;
 
     const [articlesAmount] = args;
     const amountArticles = Number.parseInt(articlesAmount, 10) || DEFAULT_AMOUNT;

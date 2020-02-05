@@ -5,7 +5,10 @@ const packageJsonFile = require(`../../../package.json`);
 
 module.exports = {
   name: `--version`,
-  run() {
-    console.info(chalk.blue(packageJsonFile.version));
+  async run() {
+    const version = await packageJsonFile.version;
+    if (version) {
+      console.info(chalk.blue(version));
+    }
   }
 };

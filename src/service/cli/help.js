@@ -2,7 +2,7 @@
 
 const chalk = require(`chalk`);
 
-const helpDescription = `
+const HELP_TEXT = `
   Программа запускает http-сервер и формирует файл с данными для API.
 
     Гайд:
@@ -15,7 +15,7 @@ const helpDescription = `
 
 module.exports = {
   name: `--help`,
-  run() {
-    console.info(chalk.gray(helpDescription));
+  async run() {
+    await console.info(chalk.gray(HELP_TEXT));
   }
 };
