@@ -57,8 +57,7 @@ module.exports = {
     categoriesData = await readContent(FilePath.CATEGORIES);
     sentencesData = await readContent(FilePath.SENTENCES);
 
-    const [articlesAmount] = args;
-    const amountArticles = Number.parseInt(articlesAmount, 10) || DEFAULT_AMOUNT;
+    const amountArticles = Number.parseInt(args, 10) || DEFAULT_AMOUNT;
     const articlesInJson = JSON.stringify(generateArticles(amountArticles, titlesData, categoriesData, sentencesData));
 
     try {
