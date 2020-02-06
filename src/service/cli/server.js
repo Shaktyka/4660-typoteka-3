@@ -15,7 +15,7 @@ const StatusCode = {
   SERVER_ERROR: 500
 };
 
-const ServerLogMessages = {
+const ServerLogText = {
   ERROR: `Ошибка при создании сервера`,
   CONNECT: `Ожидаю соединений на `
 };
@@ -34,7 +34,7 @@ const renderResponseText = (stringsArray) => {
 const onClientConnect = (request, response) => {
   switch (request.url) {
     case `/`:
-      const responseText = renderResponseText([]);
+      const responseText = `Привет!`;
 
       response.writeHead(StatusCode.OK, {
         'Content-Type': `text/html; charset=UTF-8`,
@@ -60,9 +60,9 @@ module.exports = {
       .listen(port)
       .on(`listening`, (err) => {
         if (err) {
-          return console.error(`Ошибка при создании сервера`, err);
+          return console.info(chalk.red(ServerLogText.ERROR, err));
         }
-        return log(`Ожидаю соединений на ${port}`, `info`, `success`);
+        return console.info(chalk.green(ServerLogText.CONNECT + port));
       });
   }
 };
