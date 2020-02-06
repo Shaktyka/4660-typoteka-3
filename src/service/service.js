@@ -12,17 +12,29 @@ const {
 } = require(`../constants.js`);
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
-const userCommand = userArguments.slice(USER_ARGV_INDEX);
-const offersAmount = userCommand.slice(USER_ARGV_INDEX);
+let userCommand = userArguments[0];
+const amountParam = userArguments[1];
+let result = null;
 
-if (userArguments.length === 0 || !Cli[userCommand[0]]) {
-  Cli[DEFAULT_COMMAND].run();
-  process.exit(ExitCode.success);
+// Если параметры не переданы или команда не найдена
+if (userArguments.length === 0 || !Cli[userCommand]) {
+  userCommand = DEFAULT_COMMAND;
 }
 
-if (offersAmount > OFFERS_AMOUNT_MAX) {
+if (userCommand === `--generate` && amountParam > OFFERS_AMOUNT_MAX) {
   console.info(chalk.red(Message.OVERHEAD));
   process.exit(ExitCode.ERROR);
 }
 
-Cli[userCommand[0]].run(offersAmount);
+// Проверка результата
+const processResult = (promice) => {
+  promice
+    .then(() => process.exit(ExitCode.SUCCESS))
+    .catch((err) => console.info(chalk.red(err)));
+};
+
+// Вычисление и возврат результата
+result = Cli[userCommand].run(amountParam);
+if (result instanceof Promise) {
+  processResult(result);
+}
