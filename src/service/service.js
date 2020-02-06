@@ -28,10 +28,9 @@ if (userCommand === `--generate` && amountParam > POSTS_AMOUNT_MAX) {
 
 // Проверка результата
 const processResult = (promice) => {
-  // console.log(promice);
-  // promice
-  //   .then(() => process.exit(ExitCode.SUCCESS))
-  //   .catch((err) => console.info(chalk.red(err)));
+  promice
+    .then(() => process.exit(ExitCode.SUCCESS))
+    .catch((err) => console.info(chalk.red(err)));
 };
 
 // Вычисление и возврат результата

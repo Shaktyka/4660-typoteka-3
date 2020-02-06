@@ -66,7 +66,7 @@ const onClientConnect = async (request, response) => {
 
 module.exports = {
   name: `--server`,
-  async run(args) {
+  run(args) {
     const port = Number.parseInt(args, 10) || DEFAULT_PORT;
 
     http.createServer(onClientConnect)
