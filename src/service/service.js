@@ -6,7 +6,7 @@ const {Cli} = require(`./cli`);
 const {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
-  OFFERS_AMOUNT_MAX,
+  POSTS_AMOUNT_MAX,
   ExitCode,
   Message
 } = require(`../constants.js`);
@@ -21,16 +21,17 @@ if (userArguments.length === 0 || !Cli[userCommand]) {
   userCommand = DEFAULT_COMMAND;
 }
 
-if (userCommand === `--generate` && amountParam > OFFERS_AMOUNT_MAX) {
+if (userCommand === `--generate` && amountParam > POSTS_AMOUNT_MAX) {
   console.info(chalk.red(Message.OVERHEAD));
   process.exit(ExitCode.ERROR);
 }
 
 // Проверка результата
 const processResult = (promice) => {
-  promice
-    .then(() => process.exit(ExitCode.SUCCESS))
-    .catch((err) => console.info(chalk.red(err)));
+  // console.log(promice);
+  // promice
+  //   .then(() => process.exit(ExitCode.SUCCESS))
+  //   .catch((err) => console.info(chalk.red(err)));
 };
 
 // Вычисление и возврат результата

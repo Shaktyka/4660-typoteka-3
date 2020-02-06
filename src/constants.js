@@ -2,7 +2,7 @@
 
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
-const OFFERS_AMOUNT_MAX = 1000;
+const POSTS_AMOUNT_MAX = 1000;
 
 const ExitCode = {
   SUCCESS: 0,
@@ -16,7 +16,7 @@ const Message = {
 module.exports = {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
-  OFFERS_AMOUNT_MAX,
+  POSTS_AMOUNT_MAX,
   ExitCode,
   Message
 };

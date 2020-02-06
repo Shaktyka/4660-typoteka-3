@@ -41,13 +41,9 @@ const sendResponse = (response, statusCode, message) => {
 };
 
 // Рендерим список данных для возвращения клиенту
-const renderMocks = (stringsArray) => {
-  const list = `<ul>`;
-  stringsArray.forEach((string) => {
-    list += `<li>${string}</li>`;
-  });
-  list += `</ul>`;
-  return list;
+const renderPosts = (posts) => {
+  const postsList = posts.map((post) => `<li>${post.title}</li>`).join(``);
+  return `<ul>${postsList}</ul>`;
 };
 
 // Ответ сервера
@@ -57,8 +53,7 @@ const onClientConnect = async (request, response) => {
       try {
         const fileContent = await fs.readFile(MOCKS_FILE);
         const mocksData = JSON.parse(fileContent);
-        const responseMessage = renderMocks(mocksData);
-        sendResponse(response, HttpCode.OK, responseMessage);
+        sendResponse(response, HttpCode.OK, renderPosts(mocksData));
       } catch (err) {
         sendResponse(response, HttpCode.NOT_FOUND, NOT_FOUND_MESSAGE);
       }
