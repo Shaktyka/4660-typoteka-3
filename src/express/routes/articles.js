@@ -11,10 +11,9 @@ articlesRouter.get(`/:id`, (req, res) => {
   res.render(`../templates/pages/post`);
 });
 
-// нет такой страницы?
-// articlesRouter.get(`/edit/:id`, (req, res) => {
-// res.render(`../templates/pages/post`);
-// });
+articlesRouter.get(`/edit/:id`, (req, res) => {
+  res.render(`../templates/pages/edit-post`);
+});
 
 articlesRouter.get(`/category/:id`, (req, res) => {
   res.render(`../templates/pages/articles-by-category`);

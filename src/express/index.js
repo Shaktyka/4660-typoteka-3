@@ -14,7 +14,7 @@ const STATIC_DIR = path.join(__dirname, `../../markup`);
 
 const app = express();
 
-app.set(`views`, path.join(__dirname, `./templates`));
+app.set(`views`, path.join(__dirname, `templates`));
 app.set(`view engine`, `pug`);
 
 app.use(express.static(STATIC_DIR));
