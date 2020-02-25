@@ -3,9 +3,7 @@ html(lang="ru")
   include ../partials/head
   body
     .wrapper
-      include ../partials/header
+      block header
       block content
-      include ../partials/footer
-    //
-      <script src="js/vendor.js"></script>
-      <script src="js/main.js"></script>
+      block footer
+      block scripts
