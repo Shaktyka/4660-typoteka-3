@@ -3,7 +3,7 @@ extends ../layouts/main-layout.pug
 block header
   header.header
     a.header__logo.logo(href="#")
-      img.logo__image(src="img/icons/logo-image-only.svg" alt="логотип Тайпотеки")
+      img.logo__image(src="/img/icons/logo-image-only.svg" alt="логотип Тайпотеки")
       span.logo__name Типотека
     nav.header__nav
       ul.header__nav-list
@@ -46,7 +46,7 @@ block content
                     input(type="password" placeholder="Повтор пароля" required="")
                 .form__image-loader
                   a.form__avatar.avatar
-                    img(src="img/icons/smile.svg" alt="аватар пользователя")
+                    img(src="/img/icons/smile.svg" alt="аватар пользователя")
                   label
                     input.visually-hidden(type="file")
                     | Загрузить фото профиля
@@ -65,7 +65,7 @@ block content
 block footer
   footer.footer
     a.footer__copyright(href="#" aria-label="HTMLAcademy")
-      img(src="img/icons/HTMLAcademyLogo.svg" width="112" height="50" alt="HTMLAcademy")
+      img(src="/img/icons/HTMLAcademyLogo.svg" width="112" height="50" alt="HTMLAcademy")
     span.footer__dot
     p.footer__text Типотека, 2019
 
