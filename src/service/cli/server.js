@@ -2,34 +2,69 @@
 
 const express = require(`express`);
 const fs = require(`fs`).promises;
+const chalk = require(`chalk`);
 
-const DEFAULT_PORT = 3000;
-const MOCKS_FILE = `./mocks.json`;
-const NOT_FOUND_MESSAGE = `Not found`;
+const PORT = 3000;
+const MOCKS_FILE = `mocks.json`;
 
-const HttpCode = {
-  OK: 200,
-  NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500,
-  FORBIDDEN: 403,
-  UNAUTHORIZED: 401
+const ServerMessage = {
+  ERROR: `Ошибка при создании сервера`,
+  CONNECT: `Ожидаю соединений на порту`,
+  FILE_NOT_FOUND: `Файл ${MOCKS_FILE} не найден`,
+  EMPTY_FILE: `Файл ${MOCKS_FILE} пустой`,
+  DATA_SENT: `Данные отправлены`
 };
 
 const app = express();
-const router = express.Router();
+const {Router} = require(`express`);
+const router = new Router();
 
 app.use(express.json());
 app.use(`/posts`, router);
 
+const readMockData = async () => {
+  let data = [];
+
+  try {
+    data = await fs.readFile(MOCKS_FILE, `utf8`);
+    if (data === ``) {
+      data = [];
+      console.error(chalk.red(ServerMessage.EMPTY_FILE));
+    }
+  } catch (err) {
+    if (err.code === `ENOENT`) {
+      console.error(chalk.red(ServerMessage.FILE_NOT_FOUND));
+    } else {
+      console.error(chalk.red(err));
+    }
+  }
+
+  return data;
+};
+
 router.use(`/`, (req, res) => {
-  res.send(`/posts`);
+  const result = readMockData();
+
+  if (result instanceof Promise) {
+    result
+      .then((data) => {
+        res.json(data);
+        console.log(chalk.green(ServerMessage.DATA_SENT));
+      })
+      .catch((err) => console.error(chalk.red(err)));
+  }
 });
 
 module.exports = {
   name: `--server`,
   run(args) {
-    const port = Number.parseInt(args, 10) || DEFAULT_PORT;
+    const port = Number.parseInt(args, 10) || PORT;
 
-    app.listen(port, () => console.log(`Сервер запущен на порту: ${port}`));
+    app.listen(port, (err) => {
+      if (err) {
+        return console.error(chalk.red(ServerMessage.ERROR, err));
+      }
+      return console.log(chalk.green(`${ServerMessage.CONNECT} ${port}`));
+    });
   }
 };
