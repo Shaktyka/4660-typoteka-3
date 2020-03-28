@@ -21,11 +21,20 @@ const HttpCode = {
   UNAUTHORIZED: 401
 };
 
+const ServerMessage = {
+  ERROR: `Ошибка при создании сервера`,
+  CONNECT: `Ожидаю соединений на порту`,
+  FILE_NOT_FOUND: `Файл не найден`,
+  EMPTY_FILE: `Файл пустой`,
+  DATA_SENT: `Данные отправлены`
+};
+
 module.exports = {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
   POSTS_AMOUNT_MAX,
   ExitCode,
   Message,
-  HttpCode
+  HttpCode,
+  ServerMessage
 };
