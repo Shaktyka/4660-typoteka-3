@@ -4,6 +4,7 @@ const moment = require(`moment`);
 const chalk = require(`chalk`);
 const fs = require(`fs`).promises;
 const {getRandomNumber, shuffleArray, readContent} = require(`../../utils`);
+const nanoid = require(`nanoid`);
 
 const DEFAULT_AMOUNT = 1;
 const FILE_NAME = `mocks.json`;
@@ -11,7 +12,8 @@ const FILE_NAME = `mocks.json`;
 const FilePath = {
   TITLES: `./data/titles.txt`,
   CATEGORIES: `./data/categories.txt`,
-  SENTENCES: `./data/sentences.txt`
+  SENTENCES: `./data/sentences.txt`,
+  COMMENTS: `./data/comments.txt`
 };
 
 const ResultWriteMessage = {
@@ -23,6 +25,7 @@ let articles = [];
 let titlesData = null;
 let sentencesData = null;
 let categoriesData = null;
+let commentsData = null;
 
 // Генерирует даты в пределах трёх месяцев, включая текущий
 const generateRandomDate = () => {
@@ -34,11 +37,13 @@ const generateRandomDate = () => {
 // Генерирует объект данных для 1 публикации
 const generateArticle = (titles, categories, sentences) => {
   return {
+    id: nanoid(8),
     title: titles[getRandomNumber(0, titles.length - 1)],
     createdDate: generateRandomDate(),
     announce: shuffleArray(sentences).slice(0, getRandomNumber(1, 4)).join(` `),
     fullText: shuffleArray(sentences).slice(0, getRandomNumber(1, sentences.length - 1)).join(` `),
-    сategory: [shuffleArray(categories).slice(0, getRandomNumber(1, categories.length - 1))]
+    сategory: [shuffleArray(categories).slice(0, getRandomNumber(1, categories.length - 1))],
+    comments: []
   };
 };
 
@@ -56,6 +61,7 @@ module.exports = {
     titlesData = await readContent(FilePath.TITLES);
     categoriesData = await readContent(FilePath.CATEGORIES);
     sentencesData = await readContent(FilePath.SENTENCES);
+    commentsData = await readContent(FilePath.COMMENTS);
 
     const amountArticles = Number.parseInt(args, 10) || DEFAULT_AMOUNT;
     const articlesInJson = JSON.stringify(generateArticles(amountArticles, titlesData, categoriesData, sentencesData));
