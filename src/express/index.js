@@ -3,16 +3,17 @@
 const path = require(`path`);
 const express = require(`express`);
 
-const homeRouter = require(`./routes/home`);
-const loginRouter = require(`./routes/login`);
-const registerRouter = require(`./routes/register`);
-const articlesRouter = require(`./routes/articles`);
-const categoriesRouter = require(`./routes/categories`);
-const searchRouter = require(`./routes/search`);
-const myRouter = require(`./routes/my`);
+const homeRouter = require(`./routes/home-routes`);
+const loginRouter = require(`./routes/login-routes`);
+const registerRouter = require(`./routes/register-routes`);
+const articlesRouter = require(`./routes/articles-routes`);
+const categoriesRouter = require(`./routes/categories-routes`);
+const searchRouter = require(`./routes/search-routes`);
+const myRouter = require(`./routes/my-routes`);
+const STATIC_DIR = path.join(__dirname, `../../markup`);
 
 const WORK_PORT = 8080;
-const STATIC_DIR = path.join(__dirname, `../../markup`);
+const SERVER_START_MESSAGE = `Сервер запущен на порту:`;
 
 const app = express();
 
@@ -30,4 +31,4 @@ app.use(`/search`, searchRouter);
 app.use(`/my`, myRouter);
 
 app.listen(WORK_PORT, () =>
-  console.log(`Сервер запущен на порту: ${WORK_PORT}`));
+  console.log(`${SERVER_START_MESSAGE} ${WORK_PORT}`));
