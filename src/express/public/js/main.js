@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use strict';
 
 // логика выбора даты в календаре
