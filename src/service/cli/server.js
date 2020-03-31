@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require(`express`);
-const apiRouter = require(`./routes/api-routes`);
+const apiRouter = require(`./routes/api-router`);
 const chalk = require(`chalk`);
 const createError = require(`http-errors`);
 const {ServerMessage, HttpCode} = require(`../../constants`);
