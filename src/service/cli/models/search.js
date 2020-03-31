@@ -2,7 +2,7 @@
 
 const readFileData = require(`../../../utils`).readFileData;
 const {MOCKS_FILE} = require(`../../../constants`);
-// const getArticles = require(`./article`).article.getAll;
+const getArticles = require(`./article`).getAll;
 
 const search = {
   getMatches: async (text) => {

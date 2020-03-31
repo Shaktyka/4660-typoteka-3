@@ -9,9 +9,6 @@ const {
   HttpCode,
   ServerMessage
 } = require(`../../../constants`);
-// const validation = require(`../../../validation`);
-
-// const NO_ID_MESSAGE = `Не передан id`;
 
 // Отдаёт список всех статей
 articlesRouter.get(`/`, asyncHandler(async (req, res) => {

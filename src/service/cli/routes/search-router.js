@@ -12,7 +12,6 @@ const {
   SERVER_ERROR_MESSAGE
 } = require(`../../../constants`);
 
-// Поиск объявления по заголовкам
 searchRouter.get(`/`, asyncHandler(async (req, res) => {
   const queryString = req.query.query.trim();
   if (queryString.length === 0) {
