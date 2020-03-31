@@ -39,9 +39,9 @@ const ServerMessage = {
 const ResultMessage = {
   COMMENT_CREATED: `Комментарий добавлен`,
   COMMENT_DELETED: `Комментарий удалён`,
-  ARTICLE_CREATED: `Объявление добавлено`,
-  ARTICLE_UPDATED: `Объявление обновлено`,
-  ARTICLE_DELETED: `Объявление удалено`,
+  ARTICLE_CREATED: `Пост добавлен`,
+  ARTICLE_UPDATED: `Пост обновлён`,
+  ARTICLE_DELETED: `Пост удалён`,
   DATA_SENT: `Данные отправлены`,
   NOT_FOUND: `Объект не найден`
 };
