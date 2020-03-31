@@ -12,7 +12,6 @@ const {
   SERVER_ERROR_MESSAGE
 } = require(`../../../constants`);
 
-// Отдаёт все категории
 categoriesRouter.get(`/`, asyncHandler(async (req, res) => {
   try {
     let response = await category.getAll();
@@ -20,7 +19,10 @@ categoriesRouter.get(`/`, asyncHandler(async (req, res) => {
     return res.json(response);
   } catch (err) {
     console.log(chalk.red(err));
-    throw createError(HttpCode.INTERNAL_SERVER_ERROR, SERVER_ERROR_MESSAGE);
+    throw createError(
+        HttpCode.INTERNAL_SERVER_ERROR,
+        SERVER_ERROR_MESSAGE
+    );
   }
 }));
 

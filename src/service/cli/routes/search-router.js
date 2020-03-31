@@ -15,7 +15,10 @@ const {
 searchRouter.get(`/`, asyncHandler(async (req, res) => {
   const queryString = req.query.query.trim();
   if (queryString.length === 0) {
-    throw createError(HttpCode.BAD_REQUEST, EMPTY_REQUEST_MESSAGE);
+    throw createError(
+        HttpCode.BAD_REQUEST,
+        EMPTY_REQUEST_MESSAGE
+    );
   }
 
   try {
@@ -24,7 +27,10 @@ searchRouter.get(`/`, asyncHandler(async (req, res) => {
     res.json(result);
   } catch (err) {
     console.log(err);
-    throw createError(HttpCode.INTERNAL_SERVER_ERROR, SERVER_ERROR_MESSAGE);
+    throw createError(
+        HttpCode.INTERNAL_SERVER_ERROR,
+        SERVER_ERROR_MESSAGE
+    );
   }
 }));
 
