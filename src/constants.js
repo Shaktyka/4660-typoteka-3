@@ -11,6 +11,8 @@ const EMPTY_REQUEST_MESSAGE = `Пустая строка запроса`;
 const BAD_REQUEST_MESSAGE = `Неверный запрос`;
 const NO_ID_MESSAGE = `Не передан id`;
 
+const ID_SYMBOLS_AMOUNT = 6;
+
 const ExitCode = {
   SUCCESS: 0,
   ERROR: 1
@@ -59,5 +61,6 @@ module.exports = {
   SERVER_ERROR_MESSAGE,
   BAD_REQUEST_MESSAGE,
   EMPTY_REQUEST_MESSAGE,
-  NO_ID_MESSAGE
+  NO_ID_MESSAGE,
+  ID_SYMBOLS_AMOUNT
 };
