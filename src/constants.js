@@ -6,6 +6,8 @@ const POSTS_AMOUNT_MAX = 1000;
 
 const MOCKS_FILE = `mocks.json`;
 const SERVER_ERROR_MESSAGE = `Ошибка сервера`;
+const EMPTY_REQUEST_MESSAGE = `Пустая строка запроса`;
+const BAD_REQUEST_MESSAGE = `Неверный запрос`;
 
 const ExitCode = {
   SUCCESS: 0,
@@ -56,5 +58,7 @@ module.exports = {
   ServerMessage,
   ResultMessage,
   MOCKS_FILE,
-  SERVER_ERROR_MESSAGE
+  SERVER_ERROR_MESSAGE,
+  BAD_REQUEST_MESSAGE,
+  EMPTY_REQUEST_MESSAGE
 };
