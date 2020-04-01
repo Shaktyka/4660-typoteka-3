@@ -32,6 +32,25 @@ articlesRouter.get(`/`, asyncHandler(async (req, res) => {
   }
 }));
 
-
+// Отдаёт публикацию по id
+articlesRouter.get(`/:articleId`, asyncHandler(async (req, res) => {
+  try {
+    const articleId = req.params.articleId.trim();
+    const result = await article.get(articleId);
+    if (result) {
+      console.log(ResultMessage.DATA_SENT);
+      return res.json(result);
+    } else {
+      console.log(ResultMessage.NOT_FOUND);
+      return res.status(HttpCode.NOT_FOUND).send(ResultMessage.NOT_FOUND);
+    }
+  } catch (err) {
+    console.log(err);
+    throw createError(
+        HttpCode.INTERNAL_SERVER_ERROR,
+        {message: SERVER_ERROR_MESSAGE}
+    );
+  }
+}));
 
 module.exports = articlesRouter;
