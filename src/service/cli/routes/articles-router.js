@@ -5,12 +5,20 @@ const articlesRouter = new Router();
 const asyncHandler = require(`express-async-handler`);
 const createError = require(`http-errors`);
 const article = require(`../models/article`);
+const {check, validationResult} = require(`express-validator`);
 const {
   HttpCode,
-  ServerMessage
+  ServerMessage,
+  SERVER_ERROR_MESSAGE,
+  ResultMessage,
+  NO_ID_MESSAGE
 } = require(`../../../constants`);
+const {
+  CommentRequirement,
+  ArticleRequirement
+} = require(`../../../validation`);
 
-// Отдаёт список всех статей
+// Возвращает список всех статей
 articlesRouter.get(`/`, asyncHandler(async (req, res) => {
   try {
     const result = await article.getAll();
@@ -23,5 +31,7 @@ articlesRouter.get(`/`, asyncHandler(async (req, res) => {
     );
   }
 }));
+
+
 
 module.exports = articlesRouter;
