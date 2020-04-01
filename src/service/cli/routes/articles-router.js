@@ -91,7 +91,7 @@ articlesRouter.put(`/:articleId`, asyncHandler(async (req, res) => {
 
   try {
     const articleData = req.body;
-    await article.updateOffer(articleId, articleData);
+    await article.update(articleId, articleData);
     console.log(chalk.green(ResultMessage.ARTICLE_CREATED));
     return res.status(HttpCode.NO_CONTENT).send(ResultMessage.ARTICLE_UPDATED);
   } catch (err) {
