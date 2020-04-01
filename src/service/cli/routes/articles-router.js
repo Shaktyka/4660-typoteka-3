@@ -141,7 +141,28 @@ articlesRouter.put(`/:articleId/comments`, [
 }));
 
 // Удаляет комментарий по id в публикации с id
+articlesRouter.delete(`/:articleId/comments/:commentId`, asyncHandler(async (req, res) => {
+  const articleId = req.params.articleId.trim();
+  const commentId = req.params.commentId.trim();
+  if (articleId.length === 0 || commentId === 0) {
+    console.log(err);
+    throw createError(
+        HttpCode.BAD_REQUEST,
+        {message: BAD_REQUEST_MESSAGE}
+    );
+  }
 
-
+  try {
+    await article.deleteComment(articleId, commentId);
+    console.log(chalk.green(ResultMessage.COMMENT_DELETED));
+    return res.status(HttpCode.NO_CONTENT).send(ResultMessage.COMMENT_DELETED);
+  } catch (err) {
+    console.log(chalk.red(err));
+    throw createError(
+        HttpCode.INTERNAL_SERVER_ERROR,
+        {message: SERVER_ERROR_MESSAGE}
+    );
+  }
+}));
 
 module.exports = articlesRouter;
