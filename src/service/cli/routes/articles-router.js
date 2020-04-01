@@ -53,10 +53,55 @@ articlesRouter.get(`/:articleId`, asyncHandler(async (req, res) => {
 }));
 
 // Добавляет новую публикацию
+articlesRouter.post(`/`, asyncHandler(async (req, res) => {
+  const articleData = req.body;
 
+  // const errors = validationResult(req);
+  // if (!errors.isEmpty()) {
+  //   return res.status(HttpCode.BAD_REQUEST).json({errors: errors.array()});
+  // }
+
+  try {
+    await article.add(articleData);
+    console.log(chalk.green(ResultMessage.ARTICLE_CREATED));
+    return res.status(HttpCode.CREATED).send(ResultMessage.ARTICLE_CREATED);
+  } catch (err) {
+    console.log(chalk.red(err));
+    throw createError(
+        HttpCode.INTERNAL_SERVER_ERROR,
+        {message: err.message}
+    );
+  }
+}));
 
 // Обновляет публикацию по id
+articlesRouter.put(`/:articleId`, asyncHandler(async (req, res) => {
+  const articleId = req.params.articleId.trim();
+  if (articleId.length === 0) {
+    throw createError(
+        HttpCode.BAD_REQUEST,
+        {message: NO_ID_MESSAGE}
+    );
+  }
 
+  // const errors = validationResult(req);
+  // if (!errors.isEmpty()) {
+  //   return res.status(HttpCode.BAD_REQUEST).json({errors: errors.array()});
+  // }
+
+  try {
+    const articleData = req.body;
+    await article.updateOffer(articleId, articleData);
+    console.log(chalk.green(ResultMessage.ARTICLE_CREATED));
+    return res.status(HttpCode.NO_CONTENT).send(ResultMessage.ARTICLE_UPDATED);
+  } catch (err) {
+    console.log(chalk.red(err));
+    throw createError(
+        HttpCode.INTERNAL_SERVER_ERROR,
+        {message: err.message}
+    );
+  }
+}));
 
 // Удаляет публикацию по id
 articlesRouter.delete(`/:articleId`, asyncHandler(async (req, res) => {
