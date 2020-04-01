@@ -14,10 +14,7 @@ const {
   ResultMessage,
   NO_ID_MESSAGE
 } = require(`../../../constants`);
-const {
-  CommentRequirements,
-  ArticleRequirements
-} = require(`../../../validation`);
+const {CommentRequirements, ArticleRequirements} = require(`../../../validation`);
 
 // Возвращает список всех статей
 articlesRouter.get(`/`, asyncHandler(async (req, res) => {
@@ -26,6 +23,7 @@ articlesRouter.get(`/`, asyncHandler(async (req, res) => {
     console.log(chalk.green(ServerMessage.DATA_SENT));
     res.json(result);
   } catch (err) {
+    console.log(chalk.red(err));
     throw createError(
         HttpCode.INTERNAL_SERVER_ERROR,
         {message: SERVER_ERROR_MESSAGE}
@@ -54,6 +52,35 @@ articlesRouter.get(`/:articleId`, asyncHandler(async (req, res) => {
   }
 }));
 
+// Добавляет новую публикацию
+
+
+// Обновляет публикацию по id
+
+
+// Удаляет публикацию по id
+articlesRouter.delete(`/:articleId`, asyncHandler(async (req, res) => {
+  const articleId = req.params.articleId.trim();
+  if (articleId.length === 0) {
+    throw createError(
+        HttpCode.BAD_REQUEST,
+        {message: NO_ID_MESSAGE}
+    );
+  }
+
+  try {
+    await article.delete(articleId);
+    console.log(chalk.green(ResultMessage.ARTICLE_DELETED));
+    return res.status(HttpCode.NO_CONTENT).send(ResultMessage.ARTICLE_DELETED);
+  } catch (err) {
+    console.log(chalk.red(err));
+    throw createError(
+        HttpCode.INTERNAL_SERVER_ERROR,
+        {message: SERVER_ERROR_MESSAGE}
+    );
+  }
+}));
+
 // Отдаёт комментарии публикации по id
 articlesRouter.get(`/:articleId/comments`, asyncHandler(async (req, res) => {
   const articleId = req.params.articleId.trim();
@@ -69,11 +96,52 @@ articlesRouter.get(`/:articleId/comments`, asyncHandler(async (req, res) => {
     console.log(chalk.green(ResultMessage.DATA_SENT));
     res.json(result);
   } catch (err) {
+    console.log(chalk.red(err));
     throw createError(
         HttpCode.INTERNAL_SERVER_ERROR,
         {message: SERVER_ERROR_MESSAGE}
     );
   }
 }));
+
+// Добавляет комментарий для публикации с id
+articlesRouter.put(`/:articleId/comments`, [
+  check(`comment`)
+    .not().isEmpty()
+    .trim()
+    .escape()
+    .isLength({min: CommentRequirements.minLength.VALUE})
+    .withMessage(`CommentRequirements.minLength.ERROR_TEXT CommentRequirements.minLength.VALUE`)
+], asyncHandler(async (req, res) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(HttpCode.BAD_REQUEST).json({errors: errors.array()});
+  }
+
+  const articleId = req.params.articleId.trim();
+  const {comment} = req.body;
+
+  try {
+    const result = await article.addComment(articleId, comment);
+    if (result) {
+      console.log(chalk.green(ResultMessage.COMMENT_CREATED));
+      return res.status(HttpCode.CREATED).send(ResultMessage.COMMENT_CREATED);
+    } else {
+      console.log(chalk.red(err));
+      return res.status(HttpCode.NOT_FOUND).send(ResultMessage.NOT_FOUND);
+    }
+  } catch (err) {
+    console.log(chalk.red(err));
+    throw createError(
+        HttpCode.INTERNAL_SERVER_ERROR,
+        {message: SERVER_ERROR_MESSAGE}
+    );
+  }
+}));
+
+// Удаляет комментарий по id в публикации с id
+
+
 
 module.exports = articlesRouter;
