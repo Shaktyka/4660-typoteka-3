@@ -14,8 +14,8 @@ const {
   NO_ID_MESSAGE
 } = require(`../../../constants`);
 const {
-  CommentRequirement,
-  ArticleRequirement
+  CommentRequirements,
+  ArticleRequirements
 } = require(`../../../validation`);
 
 // Возвращает список всех статей
@@ -27,7 +27,7 @@ articlesRouter.get(`/`, asyncHandler(async (req, res) => {
   } catch (err) {
     throw createError(
         HttpCode.INTERNAL_SERVER_ERROR,
-        {message: `Ошибка сервера`}
+        {message: SERVER_ERROR_MESSAGE}
     );
   }
 }));

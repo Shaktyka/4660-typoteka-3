@@ -4,7 +4,10 @@ const express = require(`express`);
 const apiRouter = require(`./routes/api-router`);
 const chalk = require(`chalk`);
 const createError = require(`http-errors`);
-const {ServerMessage, HttpCode} = require(`../../constants`);
+const {
+  ServerMessage,
+  HttpCode
+} = require(`../../constants`);
 
 const PORT = 3000;
 
@@ -15,7 +18,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(`/api`, apiRouter);
 
 app.use((req, res, next) => {
-  next(createError(HttpCode.NOT_FOUND, `Not found`));
+  next(createError(HttpCode.NOT_FOUND, ServerMessage.NOT_FOUND));
 });
 
 app.use((err, req, res, next) => {

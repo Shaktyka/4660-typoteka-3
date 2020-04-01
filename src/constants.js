@@ -34,6 +34,7 @@ const ServerMessage = {
   ERROR: `Ошибка при создании сервера`,
   CONNECT: `Ожидаю соединений на порту`,
   FILE_NOT_FOUND: `Файл не найден`,
+  NOT_FOUND: `Объект не найден`,
   EMPTY_FILE: `Файл пустой`,
   DATA_SENT: `Данные отправлены`
 };

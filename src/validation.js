@@ -1,13 +1,13 @@
 'use strict';
 
-const CommentRequirement = {
+const CommentRequirements = {
   minLength: {
     VALUE: 20,
     ERROR_TEXT: `Минимальное количество символов`
   }
 };
 
-const ArticleRequirement = {
+const ArticleRequirements = {
   createdDate: {
     format: {
       VALUE: `YYYY:MM:DD HH:MM:SS`,
@@ -55,6 +55,6 @@ const ArticleRequirement = {
 };
 
 module.export = {
-  CommentRequirement,
-  ArticleRequirement
+  CommentRequirements,
+  ArticleRequirements
 };
