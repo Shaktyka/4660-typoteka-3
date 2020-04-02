@@ -18,7 +18,6 @@ const {
 } = require(`../../../constants`);
 
 const {
-  CommentRequirements,
   ArticleRequirements,
   validateComment
 } = require(`../../../validation`);
@@ -59,8 +58,15 @@ articlesRouter.get(`/:articleId`, asyncHandler(async (req, res) => {
   }
 }));
 
+// Валидация публикации
+const validateArticle = () => {
+  return [
+
+  ];
+};
+
 // Добавляет новую публикацию
-articlesRouter.post(`/`, asyncHandler(async (req, res) => {
+articlesRouter.post(`/`, validateArticle(), asyncHandler(async (req, res) => {
   const articleData = req.body;
   console.log(articleData);
 

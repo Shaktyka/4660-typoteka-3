@@ -74,7 +74,7 @@ const generateArticle = () => {
     createdDate: generateRandomDate(),
     announce: shuffleArray(sentencesData).slice(0, getRandomNumber(1, 4)).join(` `),
     fullText: shuffleArray(sentencesData).slice(0, getRandomNumber(1, sentencesData.length - 1)).join(` `),
-    сategory: [shuffleArray(categoriesData).slice(0, getRandomNumber(1, categoriesData.length - 1))],
+    сategory: shuffleArray(categoriesData).slice(0, getRandomNumber(1, categoriesData.length - 1)),
     comments: getComments(getRandomNumber(CommentsRestrict.MIN, CommentsRestrict.MAX))
   };
 };
