@@ -1,6 +1,6 @@
 'use strict';
 
-const {check, validationResult} = require(`express-validator`);
+const {check} = require(`express-validator`);
 
 const CommentRequirements = {
   minLength: {
