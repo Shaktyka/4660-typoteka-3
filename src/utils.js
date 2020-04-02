@@ -20,11 +20,11 @@ const shuffleArray = (array) => {
   return array;
 };
 
-const readFileData = (fileName) => {
+const readFileData = (filePath) => {
   let data = [];
 
   try {
-    data = fs.readFile(fileName, `utf8`);
+    data = fs.readFile(filePath, `utf8`);
     if (data === ``) {
       data = [];
       console.error(chalk.red(ServerMessage.EMPTY_FILE));
