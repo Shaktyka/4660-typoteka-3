@@ -54,7 +54,7 @@ const ArticleRequirements = {
   }
 };
 
-module.export = {
+module.exports = {
   CommentRequirements,
   ArticleRequirements
 };

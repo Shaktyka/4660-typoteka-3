@@ -14,7 +14,10 @@ const {
   ResultMessage,
   NO_ID_MESSAGE
 } = require(`../../../constants`);
-const {CommentRequirements, ArticleRequirements} = require(`../../../validation`);
+const {
+  CommentRequirements,
+  ArticleRequirements
+} = require(`../../../validation`);
 
 // Возвращает список всех статей
 articlesRouter.get(`/`, asyncHandler(async (req, res) => {
