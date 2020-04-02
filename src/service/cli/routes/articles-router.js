@@ -7,16 +7,20 @@ const createError = require(`http-errors`);
 const article = require(`../models/article`);
 const chalk = require(`chalk`);
 const {check, validationResult} = require(`express-validator`);
+
 const {
   HttpCode,
   ServerMessage,
   SERVER_ERROR_MESSAGE,
+  BAD_REQUEST_MESSAGE,
   ResultMessage,
   NO_ID_MESSAGE
 } = require(`../../../constants`);
+
 const {
   CommentRequirements,
-  ArticleRequirements
+  ArticleRequirements,
+  validateComment
 } = require(`../../../validation`);
 
 // Возвращает список всех статей
@@ -154,14 +158,7 @@ articlesRouter.get(`/:articleId/comments`, asyncHandler(async (req, res) => {
 }));
 
 // Добавляет комментарий для публикации с id
-articlesRouter.put(`/:articleId/comments`, [
-  check(`comment`)
-    .not().isEmpty()
-    .trim()
-    .escape()
-    .isLength({min: CommentRequirements.minLength.VALUE})
-    .withMessage(`${CommentRequirements.minLength.ERROR_TEXT} ${CommentRequirements.minLength.VALUE}`)
-], asyncHandler(async (req, res) => {
+articlesRouter.put(`/:articleId/comments`, validateComment(), asyncHandler(async (req, res) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -177,7 +174,6 @@ articlesRouter.put(`/:articleId/comments`, [
       console.log(chalk.green(ResultMessage.COMMENT_CREATED));
       return res.status(HttpCode.CREATED).send(ResultMessage.COMMENT_CREATED);
     } else {
-      console.log(chalk.red(err));
       return res.status(HttpCode.NOT_FOUND).send(ResultMessage.NOT_FOUND);
     }
   } catch (err) {
@@ -194,7 +190,6 @@ articlesRouter.delete(`/:articleId/comments/:commentId`, asyncHandler(async (req
   const articleId = req.params.articleId.trim();
   const commentId = req.params.commentId.trim();
   if (articleId.length === 0 || commentId === 0) {
-    console.log(err);
     throw createError(
         HttpCode.BAD_REQUEST,
         {message: BAD_REQUEST_MESSAGE}

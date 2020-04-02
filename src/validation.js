@@ -1,5 +1,7 @@
 'use strict';
 
+const {check, validationResult} = require(`express-validator`);
+
 const CommentRequirements = {
   minLength: {
     VALUE: 20,
@@ -54,7 +56,20 @@ const ArticleRequirements = {
   }
 };
 
+// Валидирует комментарий
+const validateComment = () => {
+  return [
+    check(`comment`)
+      .not().isEmpty()
+      .trim()
+      .escape()
+      .isLength({min: CommentRequirements.minLength.VALUE})
+      .withMessage(`${CommentRequirements.minLength.ERROR_TEXT} ${CommentRequirements.minLength.VALUE}`)
+  ];
+};
+
 module.exports = {
   CommentRequirements,
-  ArticleRequirements
+  ArticleRequirements,
+  validateComment
 };
