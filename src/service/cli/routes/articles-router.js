@@ -7,7 +7,6 @@ const createError = require(`http-errors`);
 const article = require(`../models/article`);
 const chalk = require(`chalk`);
 const {check, validationResult} = require(`express-validator`);
-const moment = require(`moment`);
 
 const {
   HttpCode,
@@ -62,8 +61,8 @@ articlesRouter.get(`/:articleId`, asyncHandler(async (req, res) => {
 // Валидация публикации
 const validateArticle = () => {
   return [
-    check(`picture`) // не обязательное поле
-      .trim()
+    check(`picture`)
+      .optional()
       .escape()
       .matches(`(?:jpg|jpeg|png)$`)
       .withMessage(`Неверный формат файла`),
@@ -73,38 +72,25 @@ const validateArticle = () => {
       .escape()
       .isLength({min: 30}).withMessage(`Мин символов 30`)
       .isLength({max: 250}).withMessage(`Макс символов 250`),
-    check(`created-date`) // дата и время
-      .custom((string) => {
-        if (!moment(string, `YYYY:MM:DD`).isValid()) {
-          throw createError(
-              HttpCode.UNPROCESSABLE_ENTITY,
-              {message: `Неверный формат даты`}
-          );
-        }
-        return true;
-      }),
+    check(`created-date`)
+      .not().isEmpty().withMessage(`Дата должна присутствовать`)
+      .isISO8601().toDate().withMessage(`Неверный формат даты`),
     check(`announce`)
       .not().isEmpty().withMessage(`Анонс должен быть заполнен`)
       .trim()
       .escape()
       .isLength({min: 30}).withMessage(`Мин символов 30`)
       .isLength({max: 250}).withMessage(`Макс символов 250`),
-    check(`full-text`) // не обязательное поле
+    check(`full-text`)
+      .optional()
       .trim()
       .escape()
       .isLength({max: 1000})
       .withMessage(`Полное описание не более 1000 символов`),
     check(`сategory`)
-      .not().isEmpty().withMessage(`Нужно выбрать хотя бы одну категорию`)
-      .custom((categoryList) => {
-        if (!Array.isArray(categoryList) || categoryList.length < 1) {
-          throw createError(
-              HttpCode.UNPROCESSABLE_ENTITY,
-              {message: `Неверный формат данных`}
-          );
-        }
-        return true;
-      })
+      .not().isEmpty()
+      .isArray({min: 1})
+      .withMessage(`Нужно выбрать хотя бы одну категорию`)
   ];
 };
 
@@ -132,7 +118,7 @@ articlesRouter.post(`/`, validateArticle(), asyncHandler(async (req, res) => {
 }));
 
 // Обновляет публикацию по id
-articlesRouter.put(`/:articleId`, asyncHandler(async (req, res) => {
+articlesRouter.put(`/:articleId`, validateArticle(), asyncHandler(async (req, res) => {
   const articleId = req.params.articleId.trim();
   if (articleId.length === 0) {
     throw createError(
@@ -141,10 +127,10 @@ articlesRouter.put(`/:articleId`, asyncHandler(async (req, res) => {
     );
   }
 
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return res.status(HttpCode.BAD_REQUEST).json({errors: errors.array()});
-  // }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(HttpCode.BAD_REQUEST).json({errors: errors.array()});
+  }
 
   try {
     const articleData = req.body;
