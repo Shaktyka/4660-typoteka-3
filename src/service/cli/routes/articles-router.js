@@ -58,6 +58,7 @@ articlesRouter.get(`/:articleId`, asyncHandler(async (req, res) => {
 // Добавляет новую публикацию
 articlesRouter.post(`/`, asyncHandler(async (req, res) => {
   const articleData = req.body;
+  console.log(articleData);
 
   // const errors = validationResult(req);
   // if (!errors.isEmpty()) {
@@ -159,7 +160,7 @@ articlesRouter.put(`/:articleId/comments`, [
     .trim()
     .escape()
     .isLength({min: CommentRequirements.minLength.VALUE})
-    .withMessage(`CommentRequirements.minLength.ERROR_TEXT CommentRequirements.minLength.VALUE`)
+    .withMessage(`${CommentRequirements.minLength.ERROR_TEXT} ${CommentRequirements.minLength.VALUE}`)
 ], asyncHandler(async (req, res) => {
 
   const errors = validationResult(req);
