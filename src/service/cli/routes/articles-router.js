@@ -63,7 +63,6 @@ const validateArticle = () => {
   return [
     check(`picture`)
       .optional()
-      .escape()
       .matches(`(?:jpg|jpeg|png)$`)
       .withMessage(`Неверный формат файла`),
     check(`title`)
