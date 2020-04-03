@@ -1,7 +1,6 @@
 'use strict';
 
 const {readFileData} = require(`../../../utils`);
-const createError = require(`http-errors`);
 const nanoid = require(`nanoid`);
 const {
   MOCKS_FILE,
@@ -39,7 +38,7 @@ const article = {
     articleObject.id = nanoid(ID_SYMBOLS_AMOUNT);
 
     parsedList.push(articleObject);
-    return articleObject; // временно
+    return articleObject;
   },
 
   // Обновляет публикацию по id
@@ -56,7 +55,7 @@ const article = {
       post.category = articleData.category;
     }
 
-    return post; // временно
+    return post;
   },
 
   // Удаляет публикацию по id
@@ -68,7 +67,7 @@ const article = {
       return it.id !== id;
     });
 
-    return filteredList; // временно
+    return filteredList;
   },
 
   // Возвращает список комментариев публикации по id
@@ -89,17 +88,23 @@ const article = {
     if (post) {
       post.comments.push({id: nanoid(ID_SYMBOLS_AMOUNT), text: comment});
     }
-    return post; // временно
+    return post;
   },
 
   // Удаляет комментарий по id в публикации с id
   deleteComment: async (articleId, commentId) => {
     const post = await article.get(articleId);
-    post.comments = post.comments.filter((comment) => {
-      return comment.id !== commentId;
-    });
+    if (!post || !post.comments.length) {
+      return null;
+    }
+    const comments = post.comments;
+    const filteredComments = comments.filter((comment) => comment.id !== commentId);
 
-    return post; // временно
+    if (comments.length === filteredComments.length) {
+      return null;
+    }
+    post.comments = filteredComments;
+    return post;
   }
 };
 

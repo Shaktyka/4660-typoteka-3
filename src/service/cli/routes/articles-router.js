@@ -193,7 +193,7 @@ articlesRouter.put(`/:articleId/comments`, validateComment(), asyncHandler(async
 articlesRouter.delete(`/:articleId/comments/:commentId`, asyncHandler(async (req, res) => {
   const articleId = req.params.articleId.trim();
   const commentId = req.params.commentId.trim();
-  if (articleId.length === 0 || commentId === 0) {
+  if (articleId.length === 0 || commentId.length === 0) {
     throw createError(
         HttpCode.BAD_REQUEST,
         {message: BAD_REQUEST_MESSAGE}
@@ -201,9 +201,14 @@ articlesRouter.delete(`/:articleId/comments/:commentId`, asyncHandler(async (req
   }
 
   try {
-    await article.deleteComment(articleId, commentId);
-    console.log(chalk.green(ResultMessage.COMMENT_DELETED));
-    return res.status(HttpCode.NO_CONTENT).send(ResultMessage.COMMENT_DELETED);
+    const result = await article.deleteComment(articleId, commentId);
+    if (result) {
+      console.log(chalk.green(ResultMessage.COMMENT_DELETED));
+      return res.status(HttpCode.NO_CONTENT).send(ResultMessage.COMMENT_DELETED);
+    } else {
+      console.log(chalk.red(ResultMessage.NOT_FOUND));
+      return res.status(HttpCode.NOT_FOUND).send(ResultMessage.NOT_FOUND);
+    }
   } catch (err) {
     console.log(chalk.red(err));
     throw createError(
