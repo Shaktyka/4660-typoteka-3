@@ -1,6 +1,11 @@
 'use strict';
 
 const {check} = require(`express-validator`);
+const moment = require(`moment`);
+const createError = require(`http-errors`);
+const {
+  HttpCode
+} = require(`./constants`);
 
 const REQUIRED_MESSAGE = `Поле должно быть заполнено`;
 
@@ -14,7 +19,6 @@ const CommentRequirements = {
 const ArticleRequirements = {
   createdDate: {
     format: {
-      VALUE: `YYYY:MM:DD HH:MM:SS`,
       ERROR_TEXT: `Неверный формат даты`
     }
   },
@@ -85,7 +89,17 @@ const validateArticle = () => {
       .isLength({max: 250}).withMessage(`${ArticleRequirements.title.maxLength.ERROR_TEXT} ${ArticleRequirements.title.maxLength.VALUE}`),
     check(`created-date`)
       .not().isEmpty().withMessage(REQUIRED_MESSAGE)
-      .isISO8601().toDate().withMessage(ArticleRequirements.createdDate.format.ERROR_TEXT),
+      .custom((value, {req}) => {
+        const formattedValue = moment(value, `DD.MM.YYYY`).format();
+        if (!moment(value, `DD.MM.YYYY`).isValid()) {
+          throw createError(
+              HttpCode.UNPROCESSABLE_ENTITY,
+              {message: ArticleRequirements.createdDate.format.ERROR_TEXT}
+          );
+        }
+        req.body[`created-date`] = formattedValue;
+        return true;
+      }),
     check(`announce`)
       .not().isEmpty().withMessage(REQUIRED_MESSAGE)
       .trim()
