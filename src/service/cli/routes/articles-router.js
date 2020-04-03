@@ -6,7 +6,7 @@ const asyncHandler = require(`express-async-handler`);
 const createError = require(`http-errors`);
 const article = require(`../models/article`);
 const chalk = require(`chalk`);
-const {check, validationResult} = require(`express-validator`);
+const {validationResult} = require(`express-validator`);
 
 const {
   HttpCode,
@@ -18,8 +18,8 @@ const {
 } = require(`../../../constants`);
 
 const {
-  ArticleRequirements,
-  validateComment
+  validateComment,
+  validateArticle
 } = require(`../../../validation`);
 
 // Возвращает список всех статей
@@ -57,41 +57,6 @@ articlesRouter.get(`/:articleId`, asyncHandler(async (req, res) => {
     );
   }
 }));
-
-// Валидация публикации
-const validateArticle = () => {
-  return [
-    check(`picture`)
-      .optional()
-      .matches(`(?:jpg|jpeg|png)$`)
-      .withMessage(`Неверный формат файла`),
-    check(`title`)
-      .not().isEmpty().withMessage(`Заголовок должен быть заполнен`)
-      .trim()
-      .escape()
-      .isLength({min: 30}).withMessage(`Мин символов 30`)
-      .isLength({max: 250}).withMessage(`Макс символов 250`),
-    check(`created-date`)
-      .not().isEmpty().withMessage(`Дата должна присутствовать`)
-      .isISO8601().toDate().withMessage(`Неверный формат даты`),
-    check(`announce`)
-      .not().isEmpty().withMessage(`Анонс должен быть заполнен`)
-      .trim()
-      .escape()
-      .isLength({min: 30}).withMessage(`Мин символов 30`)
-      .isLength({max: 250}).withMessage(`Макс символов 250`),
-    check(`full-text`)
-      .optional()
-      .trim()
-      .escape()
-      .isLength({max: 1000})
-      .withMessage(`Полное описание не более 1000 символов`),
-    check(`сategory`)
-      .not().isEmpty()
-      .isArray({min: 1})
-      .withMessage(`Нужно выбрать хотя бы одну категорию`)
-  ];
-};
 
 // Добавляет новую публикацию
 articlesRouter.post(`/`, validateArticle(), asyncHandler(async (req, res) => {
