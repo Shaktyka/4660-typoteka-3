@@ -36,6 +36,7 @@ const article = {
 
     const articleObject = articleData;
     articleObject.id = nanoid(ID_SYMBOLS_AMOUNT);
+    // Что тут делать с датой?
 
     parsedList.push(articleObject);
     return articleObject;
@@ -49,7 +50,7 @@ const article = {
       post.id = nanoid(ID_SYMBOLS_AMOUNT);
       post.title = articleData[`title`];
       post.picture = articleData.picture || ``;
-      post.createdDate = articleData[`created-date`]; // тут надо время добавлять (?)
+      post.createdDate = articleData[`created-date`]; // Как добавить текущее время?
       post.announce = articleData.announce;
       post.fullText = articleData[`full-text`] || ``;
       post.category = articleData.category;

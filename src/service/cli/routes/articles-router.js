@@ -163,7 +163,6 @@ articlesRouter.get(`/:articleId/comments`, asyncHandler(async (req, res) => {
 
 // Добавляет комментарий для публикации с id
 articlesRouter.put(`/:articleId/comments`, validateComment(), asyncHandler(async (req, res) => {
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(HttpCode.BAD_REQUEST).json({errors: errors.array()});
@@ -178,6 +177,7 @@ articlesRouter.put(`/:articleId/comments`, validateComment(), asyncHandler(async
       console.log(chalk.green(ResultMessage.COMMENT_CREATED));
       return res.status(HttpCode.CREATED).send(ResultMessage.COMMENT_CREATED);
     } else {
+      console.log(chalk.red(ResultMessage.NOT_FOUND));
       return res.status(HttpCode.NOT_FOUND).send(ResultMessage.NOT_FOUND);
     }
   } catch (err) {
