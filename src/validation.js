@@ -2,6 +2,8 @@
 
 const {check} = require(`express-validator`);
 
+const REQUIRED_MESSAGE = `Поле должно быть заполнено`;
+
 const CommentRequirements = {
   minLength: {
     VALUE: 20,
@@ -27,7 +29,7 @@ const ArticleRequirements = {
     }
   },
   image: {
-    allowedExtentions: {
+    allowedFormats: {
       VALUE: [`jpeg`, `jpg`, `png`],
       ERROR_TEXT: `Неразрешённый тип данных`
     }
@@ -74,32 +76,32 @@ const validateArticle = () => {
     check(`picture`)
       .optional()
       .matches(`(?:jpg|jpeg|png)$`)
-      .withMessage(`Неверный формат файла`),
+      .withMessage(ArticleRequirements.image.allowedFormats.ERROR_TEXT),
     check(`title`)
-      .not().isEmpty().withMessage(`Заголовок должен быть заполнен`)
+      .not().isEmpty().withMessage(REQUIRED_MESSAGE)
       .trim()
       .escape()
-      .isLength({min: 30}).withMessage(`Мин символов 30`)
-      .isLength({max: 250}).withMessage(`Макс символов 250`),
+      .isLength({min: 30}).withMessage(`${ArticleRequirements.title.minLength.ERROR_TEXT} ${ArticleRequirements.title.minLength.VALUE}`)
+      .isLength({max: 250}).withMessage(`${ArticleRequirements.title.maxLength.ERROR_TEXT} ${ArticleRequirements.title.maxLength.VALUE}`),
     check(`created-date`)
-      .not().isEmpty().withMessage(`Дата должна присутствовать`)
-      .isISO8601().toDate().withMessage(`Неверный формат даты`),
+      .not().isEmpty().withMessage(REQUIRED_MESSAGE)
+      .isISO8601().toDate().withMessage(ArticleRequirements.createdDate.format.ERROR_TEXT),
     check(`announce`)
-      .not().isEmpty().withMessage(`Анонс должен быть заполнен`)
+      .not().isEmpty().withMessage(REQUIRED_MESSAGE)
       .trim()
       .escape()
-      .isLength({min: 30}).withMessage(`Мин символов 30`)
-      .isLength({max: 250}).withMessage(`Макс символов 250`),
+      .isLength({min: 30}).withMessage(`${ArticleRequirements.announce.minLength.ERROR_TEXT} ${ArticleRequirements.announce.minLength.VALUE}`)
+      .isLength({max: 250}).withMessage(`${ArticleRequirements.announce.maxLength.ERROR_TEXT} ${ArticleRequirements.announce.maxLength.VALUE}`),
     check(`full-text`)
       .optional()
       .trim()
       .escape()
       .isLength({max: 1000})
-      .withMessage(`Полное описание не более 1000 символов`),
+      .withMessage(`${ArticleRequirements.fullText.maxLength.ERROR_TEXT} ${ArticleRequirements.fullText.maxLength.VALUE}`),
     check(`сategory`)
       .not().isEmpty()
       .isArray({min: 1})
-      .withMessage(`Нужно выбрать хотя бы одну категорию`)
+      .withMessage(ArticleRequirements.category.minAmount.ERROR_TEXT)
   ];
 };
 
