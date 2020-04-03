@@ -98,9 +98,14 @@ articlesRouter.put(`/:articleId`, validateArticle(), asyncHandler(async (req, re
 
   try {
     const articleData = req.body;
-    await article.update(articleId, articleData);
-    console.log(chalk.green(ResultMessage.ARTICLE_CREATED));
-    return res.status(HttpCode.NO_CONTENT).send(ResultMessage.ARTICLE_UPDATED);
+    const result = await article.update(articleId, articleData);
+    if (result) {
+      console.log(chalk.green(ResultMessage.ARTICLE_UPDATED));
+      return res.status(HttpCode.NO_CONTENT).send(ResultMessage.ARTICLE_UPDATED);
+    } else {
+      console.log(chalk.red(ResultMessage.NOT_FOUND));
+      return res.status(HttpCode.NOT_FOUND).send(ResultMessage.NOT_FOUND);
+    }
   } catch (err) {
     console.log(chalk.red(err));
     throw createError(

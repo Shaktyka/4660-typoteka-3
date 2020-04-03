@@ -1,6 +1,7 @@
 'use strict';
 
 const {readFileData} = require(`../../../utils`);
+const createError = require(`http-errors`);
 const nanoid = require(`nanoid`);
 const {
   MOCKS_FILE,
@@ -42,18 +43,18 @@ const article = {
   },
 
   // Обновляет публикацию по id
-  updateOffer: async (id) => {
-    // articleData
+  update: async (id, articleData) => {
     const post = await article.get(id);
 
-    /*
-    post.title = articleData[`ticket-name`];
-    post.picture = articleData.avatar;
-    post.description = articleData.comment;
-    post.type = articleData.action;
-    post.sum = articleData.price;
-    post.category = articleData.category;
-    */
+    if (post) {
+      post.id = nanoid(ID_SYMBOLS_AMOUNT);
+      post.title = articleData[`title`];
+      post.picture = articleData.picture || ``;
+      post.createdDate = articleData[`created-date`]; // тут надо время добавлять (?)
+      post.announce = articleData.announce;
+      post.fullText = articleData[`full-text`] || ``;
+      post.category = articleData.category;
+    }
 
     return post; // временно
   },
