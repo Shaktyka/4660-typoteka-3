@@ -161,7 +161,7 @@ articlesRouter.get(`/:articleId/comments`, asyncHandler(async (req, res) => {
 }));
 
 // Добавляет комментарий для публикации с id
-articlesRouter.put(`/:articleId/comments`, validateComment(), asyncHandler(async (req, res) => {
+articlesRouter.post(`/:articleId/comments`, validateComment(), asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(HttpCode.BAD_REQUEST).json({errors: errors.array()});
