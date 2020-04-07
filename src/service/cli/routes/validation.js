@@ -5,7 +5,7 @@ const moment = require(`moment`);
 const createError = require(`http-errors`);
 const {
   HttpCode
-} = require(`./constants`);
+} = require(`../../../constants`);
 
 const REQUIRED_MESSAGE = `Поле должно быть заполнено`;
 

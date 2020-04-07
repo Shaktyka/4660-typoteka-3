@@ -20,7 +20,7 @@ const {
 const {
   validateComment,
   validateArticle
-} = require(`../../../validation`);
+} = require(`./validation`);
 
 // Возвращает список всех статей
 articlesRouter.get(`/`, asyncHandler(async (req, res) => {
