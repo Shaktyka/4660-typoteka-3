@@ -20,12 +20,7 @@ const article = {
     const articlesList = await article.getAll();
     const parsedList = JSON.parse(articlesList);
 
-    for (let i = 0; i < parsedList.length; i++) {
-      if (parsedList[i].id === id) {
-        post = parsedList[i];
-        break;
-      }
-    }
+    post = parsedList.find((it) => it.id === id);
     return post;
   },
 
