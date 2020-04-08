@@ -31,8 +31,7 @@ const article = {
 
     const articleObject = articleData;
     articleObject.id = nanoid(ID_SYMBOLS_AMOUNT);
-    // Что тут делать с датой?
-    console.log(articleObject);
+    // console.log(articleObject);
     parsedList.push(articleObject);
     return articleObject;
   },
