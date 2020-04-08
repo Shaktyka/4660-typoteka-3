@@ -7,33 +7,44 @@ const {
   ID_SYMBOLS_AMOUNT
 } = require(`../../../constants`);
 
+// Массив статей из файла
+let articles = null;
+
 const article = {
   // Возвращает весь список публикаций
   getAll: async () => {
-    const articlesList = await readFileData(MOCKS_FILE);
-    return articlesList;
+    if (!articles) {
+      articles = await readFileData(MOCKS_FILE);
+    }
+    return JSON.parse(articles);
+  },
+
+  updateList: async (articleObj) => {
+    await article.getAll()
+      .then((articlesList) => {
+        articles = articlesList.push(articleObj);
+      })
+      .catch((err) => console.log(err));
   },
 
   // Возвращает публикацию по id
   get: async (id) => {
     let post = null;
-    const articlesList = await article.getAll();
-    const parsedList = JSON.parse(articlesList);
-
-    post = parsedList.find((it) => it.id === id);
+    await article.getAll()
+      .then((articlesList) => {
+        post = articlesList.find((it) => it.id === id);
+      })
+      .catch((err) => console.log(err));
     return post;
   },
 
   // Добавляет новую публикацию
   add: async (articleData) => {
-    const articlesList = await article.getAll();
-    const parsedList = JSON.parse(articlesList);
-
     const articleObject = articleData;
     articleObject.id = nanoid(ID_SYMBOLS_AMOUNT);
-    // console.log(articleObject);
-    parsedList.push(articleObject);
-    return articleObject;
+
+    await article.updateList(articleObject);
+    return articleObject.id;
   },
 
   // Обновляет публикацию по id
@@ -50,19 +61,17 @@ const article = {
       post.category = articleData.category;
     }
 
-    return post;
+    await article.updateList(post);
+    return post.id;
   },
 
   // Удаляет публикацию по id
   delete: async (id) => {
-    const articlesList = await article.getAll();
-    const parsedList = JSON.parse(articlesList);
-
-    const filteredList = parsedList.filter((it) => {
-      return it.id !== id;
-    });
-
-    return filteredList;
+    await article.getAll()
+      .then((articlesList) => {
+        articles = articlesList.filter((it) => it.id !== id);
+      })
+      .catch((err) => console.log(err));
   },
 
   // Возвращает список комментариев публикации по id
@@ -82,6 +91,7 @@ const article = {
     const post = await article.get(id);
     if (post) {
       post.comments.push({id: nanoid(ID_SYMBOLS_AMOUNT), text: comment});
+      await article.updateList(post);
     }
     return post;
   },
@@ -99,6 +109,7 @@ const article = {
       return null;
     }
     post.comments = filteredComments;
+    await article.updateList(post);
     return post;
   }
 };
