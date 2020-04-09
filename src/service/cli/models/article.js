@@ -20,17 +20,6 @@ const article = {
     return articles;
   },
 
-  // Возвращает индекс элемента
-  getIndex: async (articleId) => {
-    let index = null;
-    await article.getAll()
-      .then((articlesList) => {
-        index = articlesList.find((it) => it.id === articleId);
-      })
-      .catch((err) => console.log(err));
-    return index;
-  },
-
   addToArray: async (articleObj) => {
     await article.getAll()
       .then((articlesList) => {
@@ -39,14 +28,6 @@ const article = {
       })
       .catch((err) => console.log(err));
   },
-
-  // updateList: async (articleObj) => {
-  //   await article.getAll()
-  //     .then((articlesList) => {
-  //       подумать
-  //     })
-  //     .catch((err) => console.log(err));
-  // },
 
   // Возвращает публикацию по id
   get: async (id) => {
@@ -139,19 +120,26 @@ const article = {
 
   // Удаляет комментарий по id в публикации с id
   deleteComment: async (articleId, commentId) => {
-    const post = await article.get(articleId);
-    if (!post || !post.comments.length) {
-      return null;
-    }
-    const comments = post.comments;
-    const filteredComments = comments.filter((comment) => comment.id !== commentId);
+    let isDeleted = false;
 
-    if (comments.length === filteredComments.length) {
-      return null;
-    }
-    post.comments = filteredComments;
-    await article.updateList(post);
-    return post;
+    await article.getAll()
+      .then((articlesList) => {
+        for (let articleItem of articlesList) {
+          if (articleItem.id === articleId) {
+            const articleComments = articleItem.comments;
+
+            const filteredComments = articleComments.filter((comment) => {
+              return comment.id !== commentId;
+            });
+            articleItem.comments = filteredComments;
+            isDeleted = true;
+            break;
+          }
+        }
+        articles = articlesList;
+      })
+      .catch((err) => console.log(err));
+    return isDeleted;
   }
 };
 
