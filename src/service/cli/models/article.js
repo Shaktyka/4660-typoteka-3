@@ -120,12 +120,21 @@ const article = {
 
   // Добавляет комментарий в публикацию по id
   addComment: async (id, comment) => {
-    const post = await article.get(id);
-    if (post) {
-      post.comments.push({id: nanoid(ID_SYMBOLS_AMOUNT), text: comment});
-      await article.updateList(post);
-    }
-    return post;
+    const newComment = {"id": nanoid(4), "text": comment};
+
+    await article.getAll()
+      .then((articlesList) => {
+        for (let it of articlesList) {
+          if (it.id === id) {
+            it.comments.push(newComment);
+            break;
+          }
+        }
+        articles = articlesList;
+      })
+      .catch((err) => console.log(err));
+
+    return newComment;
   },
 
   // Удаляет комментарий по id в публикации с id
