@@ -13,15 +13,25 @@ let articles = null;
 const article = {
   // Возвращает весь список публикаций
   getAll: async () => {
-    // !Array.isArray(articles)
-    if (!articles) {
+    if (!Array.isArray(articles)) {
       articles = await readFileData(MOCKS_FILE);
       articles = JSON.parse(articles);
     }
     return articles;
   },
 
-  updateList: async (articleObj) => {
+  // Возвращает индекс элемента
+  getIndex: async (articleId) => {
+    let index = null;
+    await article.getAll()
+      .then((articlesList) => {
+        index = articlesList.find((it) => it.id === articleId);
+      })
+      .catch((err) => console.log(err));
+    return index;
+  },
+
+  addToArray: async (articleObj) => {
     await article.getAll()
       .then((articlesList) => {
         articlesList.push(articleObj);
@@ -29,6 +39,14 @@ const article = {
       })
       .catch((err) => console.log(err));
   },
+
+  // updateList: async (articleObj) => {
+  //   await article.getAll()
+  //     .then((articlesList) => {
+  //       подумать
+  //     })
+  //     .catch((err) => console.log(err));
+  // },
 
   // Возвращает публикацию по id
   get: async (id) => {
@@ -45,7 +63,7 @@ const article = {
   add: async (articleData) => {
     const articleObject = articleData;
     articleObject.id = nanoid(ID_SYMBOLS_AMOUNT);
-    await article.updateList(articleObject);
+    await article.addToArray(articleObject);
     return articleObject.id;
   },
 
@@ -54,17 +72,27 @@ const article = {
     const post = await article.get(id);
 
     if (post) {
-      post.id = nanoid(ID_SYMBOLS_AMOUNT);
       post.title = articleData[`title`];
       post.picture = articleData.picture || ``;
       post.createdDate = articleData[`created-date`];
       post.announce = articleData.announce;
       post.fullText = articleData[`full-text`] || ``;
       post.category = articleData.category;
+
+      await article.getAll()
+        .then((articlesList) => {
+          for (let it of articlesList) {
+            if (it.id === post.id) {
+              it = post;
+              break;
+            }
+          }
+          articles = articlesList;
+        })
+        .catch((err) => console.log(err));
     }
 
-    await article.updateList(post);
-    return post.id;
+    return post;
   },
 
   // Удаляет публикацию по id
