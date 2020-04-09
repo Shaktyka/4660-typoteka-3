@@ -13,16 +13,19 @@ let articles = null;
 const article = {
   // Возвращает весь список публикаций
   getAll: async () => {
+    // !Array.isArray(articles)
     if (!articles) {
       articles = await readFileData(MOCKS_FILE);
+      articles = JSON.parse(articles);
     }
-    return JSON.parse(articles);
+    return articles;
   },
 
   updateList: async (articleObj) => {
     await article.getAll()
       .then((articlesList) => {
-        articles = articlesList.push(articleObj);
+        articlesList.push(articleObj);
+        articles = articlesList;
       })
       .catch((err) => console.log(err));
   },
@@ -42,7 +45,6 @@ const article = {
   add: async (articleData) => {
     const articleObject = articleData;
     articleObject.id = nanoid(ID_SYMBOLS_AMOUNT);
-
     await article.updateList(articleObject);
     return articleObject.id;
   },
@@ -55,7 +57,7 @@ const article = {
       post.id = nanoid(ID_SYMBOLS_AMOUNT);
       post.title = articleData[`title`];
       post.picture = articleData.picture || ``;
-      post.createdDate = articleData[`created-date`]; // Как добавить текущее время?
+      post.createdDate = articleData[`created-date`];
       post.announce = articleData.announce;
       post.fullText = articleData[`full-text`] || ``;
       post.category = articleData.category;
@@ -69,7 +71,9 @@ const article = {
   delete: async (id) => {
     await article.getAll()
       .then((articlesList) => {
-        articles = articlesList.filter((it) => it.id !== id);
+        articles = articlesList.filter((it) => {
+          return it.id !== id;
+        });
       })
       .catch((err) => console.log(err));
   },
