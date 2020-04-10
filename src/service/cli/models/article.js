@@ -20,9 +20,10 @@ const article = {
     return articles;
   },
 
-  // Возвращает объект с данными, которые можно перед записью модифицировать
-  fillWithData: (data, isNew = false) => {
+  // Возвращает объект с данными нового объявления
+  fillWithData: (data) => {
     const articleObjest = {
+      id: nanoid(ID_SYMBOLS_AMOUNT),
       title: data.title,
       picture: data.picture || ``,
       createdDate: data[`created-date`],
@@ -30,10 +31,6 @@ const article = {
       fullText: data[`full-text`] || ``,
       category: data.category
     };
-    if (isNew) {
-      articleObjest.id = nanoid(ID_SYMBOLS_AMOUNT);
-    }
-    console.log(articleObjest);
     return articleObjest;
   },
 
@@ -51,8 +48,7 @@ const article = {
 
   // Добавляет новую публикацию
   add: async (articleData) => {
-    const isNew = true;
-    const newArticle = article.fillWithData(articleData, isNew);
+    const newArticle = article.fillWithData(articleData);
     await article.addToArray(newArticle);
     return newArticle.id;
   },
@@ -60,20 +56,19 @@ const article = {
   // Обновляет публикацию по id
   update: async (id, articleData) => {
     let post = await article.get(id);
-    console.log(post);
+    let postId = null;
 
     if (post) {
-      post = article.fillWithData(articleData);
-      console.log(post);
-      // post.title = articleData[`title`];
-      // post.picture = articleData.picture || ``;
-      // post.createdDate = articleData[`created-date`];
-      // post.announce = articleData.announce;
-      // post.fullText = articleData[`full-text`] || ``;
-      // post.category = articleData.category;
+      post.title = articleData.title;
+      post.picture = articleData.picture || ``;
+      post.createdDate = articleData[`created-date`];
+      post.announce = articleData.announce;
+      post.fullText = articleData[`full-text`] || ``;
+      post.category = articleData.category;
+      postId = id;
     }
 
-    return post;
+    return postId;
   },
 
   // Удаляет публикацию по id
