@@ -107,8 +107,8 @@ const validateArticle = () => {
       .isLength({min: 30}).withMessage(`${ArticleRequirements.announce.minLength.ERROR_TEXT} ${ArticleRequirements.announce.minLength.VALUE}`)
       .isLength({max: 250}).withMessage(`${ArticleRequirements.announce.maxLength.ERROR_TEXT} ${ArticleRequirements.announce.maxLength.VALUE}`),
     check(`category`)
-      .isArray({min: 1})
-      .withMessage(ArticleRequirements.category.minAmount.ERROR_TEXT),
+       .isArray({min: 1})
+       .withMessage(ArticleRequirements.category.minAmount.ERROR_TEXT),
     check(`full-text`)
       .optional()
       .trim()

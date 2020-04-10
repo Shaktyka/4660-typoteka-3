@@ -33,13 +33,12 @@ const article = {
     if (isNew) {
       articleObjest.id = nanoid(ID_SYMBOLS_AMOUNT);
     }
-    // console.log(articleObjest);
+    console.log(articleObjest);
     return articleObjest;
   },
 
   // Добавляет объект в массив статей
   addToArray: async (articleObj) => {
-    console.log(`вход`, articleObj); // проверить валидацию
     const articlesList = await article.getAll();
     articlesList.push(articleObj);
   },

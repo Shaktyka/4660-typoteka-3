@@ -68,7 +68,6 @@ articlesRouter.post(`/`, validateArticle(), asyncHandler(async (req, res) => {
   }
 
   try {
-    console.log(`роут: `, articleData);
     await article.add(articleData);
     console.log(chalk.green(ResultMessage.ARTICLE_CREATED));
     return res.status(HttpCode.CREATED).send(ResultMessage.ARTICLE_CREATED);
