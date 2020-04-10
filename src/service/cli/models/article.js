@@ -21,15 +21,15 @@ const article = {
   },
 
   // Возвращает объект с данными нового объявления
-  fillWithData: (data) => {
+  fillWithData: (articleData) => {
     const articleObjest = {
       id: nanoid(ID_SYMBOLS_AMOUNT),
-      title: data.title,
-      picture: data.picture || ``,
-      createdDate: data[`created-date`],
-      announce: data.announce,
-      fullText: data[`full-text`] || ``,
-      category: data.category
+      title: articleData.title,
+      picture: articleData.picture || ``,
+      createdDate: articleData[`created-date`],
+      announce: articleData.announce,
+      fullText: articleData[`full-text`] || ``,
+      category: articleData.category
     };
     return articleObjest;
   },
@@ -41,9 +41,9 @@ const article = {
   },
 
   // Возвращает публикацию по id
-  get: async (id) => {
+  get: async (articleId) => {
     const articlesList = await article.getAll();
-    return articlesList.find((it) => it.id === id);
+    return articlesList.find((articleItem) => articleItem.id === articleId);
   },
 
   // Добавляет новую публикацию
@@ -54,8 +54,8 @@ const article = {
   },
 
   // Обновляет публикацию по id
-  update: async (id, articleData) => {
-    let post = await article.get(id);
+  update: async (articleId, articleData) => {
+    let post = await article.get(articleId);
     let postId = null;
 
     if (post) {
@@ -65,24 +65,24 @@ const article = {
       post.announce = articleData.announce;
       post.fullText = articleData[`full-text`] || ``;
       post.category = articleData.category;
-      postId = id;
+      postId = articleId;
     }
 
     return postId;
   },
 
   // Удаляет публикацию по id
-  delete: async (id) => {
+  delete: async (articleId) => {
     const articlesList = await article.getAll();
-    articles = articlesList.filter((it) => {
-      return it.id !== id;
+    articles = articlesList.filter((articleItem) => {
+      return articleItem.id !== articleId;
     });
   },
 
   // Возвращает список комментариев публикации по id
-  getComments: async (id) => {
+  getComments: async (articleId) => {
     let comments = [];
-    const post = await article.get(id);
+    const post = await article.get(articleId);
     if (post.hasOwnProperty(`comments`)) {
       comments = post.comments;
     }
@@ -90,32 +90,21 @@ const article = {
   },
 
   // Добавляет комментарий в публикацию по id
-  addComment: async (id, comment) => {
+  addComment: async (articleId, comment) => {
     const newComment = {"id": nanoid(4), "text": comment};
-    const articlesList = await article.getAll();
-    for (let it of articlesList) {
-      if (it.id === id) {
-        it.comments.push(newComment);
-        break;
-      }
-    }
-    return newComment;
+    const post = await article.get(articleId);
+    post.comments.push(newComment);
+    return articleId;
   },
 
   // Удаляет комментарий по id в публикации с id
   deleteComment: async (articleId, commentId) => {
     let isDeleted = false;
-
-    const articlesList = await article.getAll();
-    for (let articleItem of articlesList) {
-      if (articleItem.id === articleId) {
-        articleItem.comments = articleItem.comments.filter((comment) => {
-          return comment.id !== commentId;
-        });
-        isDeleted = true;
-        break;
-      }
-    }
+    const post = await article.get(articleId);
+    post.comments = post.comments.filter((comment) => {
+      return comment.id !== commentId;
+    });
+    isDeleted = true;
     return isDeleted;
   }
 };
