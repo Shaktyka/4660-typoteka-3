@@ -20,57 +20,58 @@ const article = {
     return articles;
   },
 
+  // Возвращает объект с данными, которые можно перед записью модифицировать
+  fillWithData: (data, isNew = false) => {
+    const articleObjest = {
+      title: data.title,
+      picture: data.picture || ``,
+      createdDate: data[`created-date`],
+      announce: data.announce,
+      fullText: data[`full-text`] || ``,
+      category: data.category
+    };
+    if (isNew) {
+      articleObjest.id = nanoid(ID_SYMBOLS_AMOUNT);
+    }
+    console.log(articleObjest);
+    return articleObjest;
+  },
+
+  // Добавляет объект в массив статей
   addToArray: async (articleObj) => {
-    await article.getAll()
-      .then((articlesList) => {
-        articlesList.push(articleObj);
-        articles = articlesList;
-      })
-      .catch((err) => console.log(err));
+    console.log(`вход`, articleObj); // проверить валидацию
+    const articlesList = await article.getAll();
+    articlesList.push(articleObj);
   },
 
   // Возвращает публикацию по id
   get: async (id) => {
-    let post = null;
-    await article.getAll()
-      .then((articlesList) => {
-        post = articlesList.find((it) => it.id === id);
-      })
-      .catch((err) => console.log(err));
-    return post;
+    const articlesList = await article.getAll();
+    return articlesList.find((it) => it.id === id);
   },
 
   // Добавляет новую публикацию
   add: async (articleData) => {
-    const articleObject = articleData;
-    articleObject.id = nanoid(ID_SYMBOLS_AMOUNT);
-    await article.addToArray(articleObject);
-    return articleObject.id;
+    const isNew = true;
+    const newArticle = article.fillWithData(articleData, isNew);
+    await article.addToArray(newArticle);
+    return newArticle.id;
   },
 
   // Обновляет публикацию по id
   update: async (id, articleData) => {
-    const post = await article.get(id);
+    let post = await article.get(id);
+    console.log(post);
 
     if (post) {
-      post.title = articleData[`title`];
-      post.picture = articleData.picture || ``;
-      post.createdDate = articleData[`created-date`];
-      post.announce = articleData.announce;
-      post.fullText = articleData[`full-text`] || ``;
-      post.category = articleData.category;
-
-      await article.getAll()
-        .then((articlesList) => {
-          for (let it of articlesList) {
-            if (it.id === post.id) {
-              it = post;
-              break;
-            }
-          }
-          articles = articlesList;
-        })
-        .catch((err) => console.log(err));
+      post = article.fillWithData(articleData);
+      console.log(post);
+      // post.title = articleData[`title`];
+      // post.picture = articleData.picture || ``;
+      // post.createdDate = articleData[`created-date`];
+      // post.announce = articleData.announce;
+      // post.fullText = articleData[`full-text`] || ``;
+      // post.category = articleData.category;
     }
 
     return post;
