@@ -33,7 +33,7 @@ const article = {
     if (isNew) {
       articleObjest.id = nanoid(ID_SYMBOLS_AMOUNT);
     }
-    console.log(articleObjest);
+    // console.log(articleObjest);
     return articleObjest;
   },
 
@@ -79,43 +79,32 @@ const article = {
 
   // Удаляет публикацию по id
   delete: async (id) => {
-    await article.getAll()
-      .then((articlesList) => {
-        articles = articlesList.filter((it) => {
-          return it.id !== id;
-        });
-      })
-      .catch((err) => console.log(err));
+    const articlesList = await article.getAll();
+    articles = articlesList.filter((it) => {
+      return it.id !== id;
+    });
   },
 
   // Возвращает список комментариев публикации по id
   getComments: async (id) => {
     let comments = [];
     const post = await article.get(id);
-
     if (post.hasOwnProperty(`comments`)) {
       comments = post.comments;
     }
-
     return comments;
   },
 
   // Добавляет комментарий в публикацию по id
   addComment: async (id, comment) => {
     const newComment = {"id": nanoid(4), "text": comment};
-
-    await article.getAll()
-      .then((articlesList) => {
-        for (let it of articlesList) {
-          if (it.id === id) {
-            it.comments.push(newComment);
-            break;
-          }
-        }
-        articles = articlesList;
-      })
-      .catch((err) => console.log(err));
-
+    const articlesList = await article.getAll();
+    for (let it of articlesList) {
+      if (it.id === id) {
+        it.comments.push(newComment);
+        break;
+      }
+    }
     return newComment;
   },
 
@@ -123,23 +112,16 @@ const article = {
   deleteComment: async (articleId, commentId) => {
     let isDeleted = false;
 
-    await article.getAll()
-      .then((articlesList) => {
-        for (let articleItem of articlesList) {
-          if (articleItem.id === articleId) {
-            const articleComments = articleItem.comments;
-
-            const filteredComments = articleComments.filter((comment) => {
-              return comment.id !== commentId;
-            });
-            articleItem.comments = filteredComments;
-            isDeleted = true;
-            break;
-          }
-        }
-        articles = articlesList;
-      })
-      .catch((err) => console.log(err));
+    const articlesList = await article.getAll();
+    for (let articleItem of articlesList) {
+      if (articleItem.id === articleId) {
+        articleItem.comments = articleItem.comments.filter((comment) => {
+          return comment.id !== commentId;
+        });
+        isDeleted = true;
+        break;
+      }
+    }
     return isDeleted;
   }
 };

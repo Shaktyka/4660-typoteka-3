@@ -106,16 +106,15 @@ const validateArticle = () => {
       .escape()
       .isLength({min: 30}).withMessage(`${ArticleRequirements.announce.minLength.ERROR_TEXT} ${ArticleRequirements.announce.minLength.VALUE}`)
       .isLength({max: 250}).withMessage(`${ArticleRequirements.announce.maxLength.ERROR_TEXT} ${ArticleRequirements.announce.maxLength.VALUE}`),
+    check(`category`)
+      .isArray({min: 1})
+      .withMessage(ArticleRequirements.category.minAmount.ERROR_TEXT),
     check(`full-text`)
       .optional()
       .trim()
       .escape()
       .isLength({max: 1000})
-      .withMessage(`${ArticleRequirements.fullText.maxLength.ERROR_TEXT} ${ArticleRequirements.fullText.maxLength.VALUE}`),
-    check(`сategory`)
-      .not().isEmpty()
-      .isArray({min: 1})
-      .withMessage(ArticleRequirements.category.minAmount.ERROR_TEXT)
+      .withMessage(`${ArticleRequirements.fullText.maxLength.ERROR_TEXT} ${ArticleRequirements.fullText.maxLength.VALUE}`)
   ];
 };
 
