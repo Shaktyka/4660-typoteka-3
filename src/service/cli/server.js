@@ -1,58 +1,35 @@
 'use strict';
 
 const express = require(`express`);
-const fs = require(`fs`).promises;
+const apiRouter = require(`./routes/api-router`);
 const chalk = require(`chalk`);
+const createError = require(`http-errors`);
+const {
+  ServerMessage,
+  HttpCode
+} = require(`../../constants`);
 
 const PORT = 3000;
-const MOCKS_FILE = `mocks.json`;
-
-const ServerMessage = {
-  ERROR: `Ошибка при создании сервера`,
-  CONNECT: `Ожидаю соединений на порту`,
-  FILE_NOT_FOUND: `Файл ${MOCKS_FILE} не найден`,
-  EMPTY_FILE: `Файл ${MOCKS_FILE} пустой`,
-  DATA_SENT: `Данные отправлены`
-};
 
 const app = express();
-const {Router} = require(`express`);
-const router = new Router();
-
 app.use(express.json());
-app.use(`/posts`, router);
+app.use(express.urlencoded({extended: false}));
 
-const readMockData = async () => {
-  let data = [];
+app.use(`/api`, apiRouter);
 
-  try {
-    data = await fs.readFile(MOCKS_FILE, `utf8`);
-    if (data === ``) {
-      data = [];
-      console.error(chalk.red(ServerMessage.EMPTY_FILE));
-    }
-  } catch (err) {
-    if (err.code === `ENOENT`) {
-      console.error(chalk.red(ServerMessage.FILE_NOT_FOUND));
-    } else {
-      console.error(chalk.red(err));
-    }
+app.use((req, res, next) => {
+  next(createError(HttpCode.NOT_FOUND, ServerMessage.NOT_FOUND));
+});
+
+app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
   }
-
-  return data;
-};
-
-router.use(`/`, (req, res) => {
-  const result = readMockData();
-
-  if (result instanceof Promise) {
-    result
-      .then((data) => {
-        res.json(data);
-        console.log(chalk.green(ServerMessage.DATA_SENT));
-      })
-      .catch((err) => console.error(chalk.red(err)));
-  }
+  res.status(err.status || HttpCode.INTERNAL_SERVER_ERROR);
+  return res.json({
+    status: err.status,
+    message: err.message
+  });
 });
 
 module.exports = {

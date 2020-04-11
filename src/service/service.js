@@ -8,7 +8,7 @@ const {
   USER_ARGV_INDEX,
   POSTS_AMOUNT_MAX,
   ExitCode,
-  Message
+  OVERHEAD_MESSAGE
 } = require(`../constants.js`);
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
@@ -22,7 +22,7 @@ if (userArguments.length === 0 || !Cli[userCommand]) {
 }
 
 if (userCommand === `--generate` && amountParam > POSTS_AMOUNT_MAX) {
-  console.info(chalk.red(Message.OVERHEAD));
+  console.info(chalk.red(OVERHEAD_MESSAGE));
   process.exit(ExitCode.ERROR);
 }
 

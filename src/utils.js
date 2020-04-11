@@ -2,6 +2,7 @@
 
 const chalk = require(`chalk`);
 const fs = require(`fs`).promises;
+const {ServerMessage} = require(`./utils`);
 
 // Генерация рандомных чисел
 const getRandomNumber = (min, max) => {
@@ -19,6 +20,26 @@ const shuffleArray = (array) => {
   return array;
 };
 
+const readFileData = (filePath) => {
+  let data = [];
+
+  try {
+    data = fs.readFile(filePath, `utf8`);
+    if (data === ``) {
+      data = [];
+      console.error(chalk.red(ServerMessage.EMPTY_FILE));
+    }
+  } catch (err) {
+    if (err.code === `ENOENT`) {
+      console.error(chalk.red(ServerMessage.FILE_NOT_FOUND));
+    } else {
+      console.error(chalk.red(err));
+    }
+  }
+
+  return data;
+};
+
 // Читает данные из файла
 const readContent = async (filePath) => {
   try {
@@ -33,5 +54,6 @@ const readContent = async (filePath) => {
 module.exports = {
   getRandomNumber,
   shuffleArray,
-  readContent
+  readContent,
+  readFileData
 };
