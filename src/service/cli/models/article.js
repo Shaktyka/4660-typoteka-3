@@ -29,7 +29,8 @@ const article = {
       createdDate: articleData[`created-date`],
       announce: articleData.announce,
       fullText: articleData[`full-text`] || ``,
-      category: articleData.category
+      category: articleData.category,
+      comments: []
     };
     return articleObjest;
   },
