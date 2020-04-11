@@ -100,11 +100,15 @@ const article = {
   // Удаляет комментарий по id в публикации с id
   deleteComment: async (articleId, commentId) => {
     let isDeleted = false;
+
     const post = await article.get(articleId);
-    post.comments = post.comments.filter((comment) => {
-      return comment.id !== commentId;
-    });
-    isDeleted = true;
+    const commentsLength = post.comments.length;
+
+    post.comments = post.comments.filter((comment) => comment.id !== commentId);
+    if (commentsLength > post.comments.length) {
+      isDeleted = true;
+    }
+
     return isDeleted;
   }
 };
